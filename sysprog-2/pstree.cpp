@@ -51,7 +51,7 @@ struct ProcessNode {
     [[nodiscard]] string toJSON() const {
         string str;
         str += '{';
-        str += R"("pid":)" + to_string(pid + 1) + ',';
+        str += R"("pid":)" + to_string(pid) + ',';
         str += R"("name":")" + name + "\",";
         str += R"("children":[)";
         for (const auto child: children) {
