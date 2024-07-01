@@ -532,45 +532,45 @@ strtok:
     mov rcx, [token_buffer]
     cmp rsi, 0 ; if (str != nullptr)
     jne .set_buffer
-.check_buffer:
-    cmp byte [rcx], 0    ; if (*buffer == '\0')
-    je .ret_null
-    mov rax, rcx    ; char *ret = buffer;
-    mov rbx, rcx    ; char *b = buffer;
-.outer_loop:
-    cmp byte [rbx], 0  ; while (*b != '\0')
-    je .end_strtok_end
-    mov rdx, rdi    ; const char *d = delim;
-.inner_loop:
-    cmp byte [rdx], 0  ; while (*d != '\0')
-    je .outer_loop_inc
-    mov r15b, byte [rdx]
-    cmp byte [rbx], r15b    ; if (*b == *d)
-    jne .inner_loop_inc
-    mov byte [rbx], 0   ; *b = '\0';
-    mov rcx, rbx
-    inc rcx ; buffer = b + 1;
-    cmp rbx, rax    ; if (b != ret) // skip the beginning delimiters
-    jne .end_strtok
-    inc rax ; ++ret;
-    jmp .outer_loop_inc
-.inner_loop_inc:
-    inc rdx ; ++d;
-    jmp .inner_loop
-.outer_loop_inc:
-    inc rbx ; ++b;
-    jmp .outer_loop
-.set_buffer:
-    mov rcx, rsi    ; buffer = str;
-    jmp .check_buffer
-.ret_null:
-    xor rax, rax    ; return nullptr;
-.end_strtok:
-    mov [token_buffer], rcx
-    ret ; return ret;
-.end_strtok_end:
-    mov [token_buffer], rbx
-    ret ; return ret;
+    .check_buffer:
+        cmp byte [rcx], 0    ; if (*buffer == '\0')
+        je .ret_null
+        mov rax, rcx    ; char *ret = buffer;
+        mov rbx, rcx    ; char *b = buffer;
+    .outer_loop:
+        cmp byte [rbx], 0  ; while (*b != '\0')
+        je .end_strtok_end
+        mov rdx, rdi    ; const char *d = delim;
+    .inner_loop:
+        cmp byte [rdx], 0  ; while (*d != '\0')
+        je .outer_loop_inc
+        mov r15b, byte [rdx]
+        cmp byte [rbx], r15b    ; if (*b == *d)
+        jne .inner_loop_inc
+        mov byte [rbx], 0   ; *b = '\0';
+        mov rcx, rbx
+        inc rcx ; buffer = b + 1;
+        cmp rbx, rax    ; if (b != ret) // skip the beginning delimiters
+        jne .end_strtok
+        inc rax ; ++ret;
+        jmp .outer_loop_inc
+    .inner_loop_inc:
+        inc rdx ; ++d;
+        jmp .inner_loop
+    .outer_loop_inc:
+        inc rbx ; ++b;
+        jmp .outer_loop
+    .set_buffer:
+        mov rcx, rsi    ; buffer = str;
+        jmp .check_buffer
+    .ret_null:
+        xor rax, rax    ; return nullptr;
+    .end_strtok:
+        mov [token_buffer], rcx
+        ret ; return ret;
+    .end_strtok_end:
+        mov [token_buffer], rbx
+        ret ; return ret;
 
 ; char in al, return value (bool) in rax
 is_digit:
